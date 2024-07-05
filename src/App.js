@@ -1,12 +1,12 @@
 import './App.css';
-import DashBoard from './Components/DashBoard';
 import Navbar from './Components/Navbar';
-import { Box } from '@chakra-ui/react'
+import Evaluate from './Components/Evaluate';
+
 function App() {
   return (
     <div >
       <Navbar/>
-     <DashBoard />
+     <Evaluate/>
     </div>
   );
 }

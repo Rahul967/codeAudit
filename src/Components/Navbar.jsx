@@ -1,5 +1,5 @@
 'use client'
-
+import logo from "../images/codeaudit.png"
 import {
   Box,
   Flex,
@@ -9,11 +9,7 @@ import {
   Stack,
   Collapse,
   Icon,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   useColorModeValue,
-  useBreakpointValue,
   useDisclosure,
   Image,
 } from '@chakra-ui/react'
@@ -30,7 +26,7 @@ export default function Navbar() {
   return (
     <Box>
       <Flex
-        bg={"#111526"}
+        bg={"rgb(4, 4, 173)"}
         color={useColorModeValue('gray.600', 'white')}
         minH={'60px'}
         py={{ base: 2 }}
@@ -50,6 +46,7 @@ export default function Navbar() {
             aria-label={'Toggle Navigation'}
           />
         </Flex>
+
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           {/* <Text
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
@@ -58,7 +55,7 @@ export default function Navbar() {
             Logo
           </Text> */}
 
-          <Image src="https://s4.ezgif.com/tmp/ezgif-4-a32bfb37ed.png" border={"0px solid red"} alt="logo" width={"100px"} />
+          <Image src={logo} border={"0px solid red"} alt="logo" ml={"20px"} width={"100px"} />
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
@@ -70,7 +67,15 @@ export default function Navbar() {
           justify={'flex-end'}
           direction={'row'}
           spacing={6}>
-          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
+          <Button
+            as={'a'}
+            display={{ base: 'none', md: 'inline-flex' }}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'black'}
+            bg={"white"}
+            href={'#'}
+            >
             Sign In
           </Button>
           <Button
@@ -78,12 +83,10 @@ export default function Navbar() {
             display={{ base: 'none', md: 'inline-flex' }}
             fontSize={'sm'}
             fontWeight={600}
-            color={'white'}
-            bg={'pink.400'}
+            color={'black'}
+            bg={"white"}
             href={'#'}
-            _hover={{
-              bg: 'pink.300',
-            }}>
+            >
             Sign Up
           </Button>
         </Stack>
@@ -103,7 +106,7 @@ const DesktopNav = () => {
 
   return (
     <Stack direction={'row'} spacing={4}>
-      {NAV_ITEMS.map((navItem) => (
+      {/* {NAV_ITEMS.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={'hover'} placement={'bottom-start'}>
             <PopoverTrigger>
@@ -139,7 +142,8 @@ const DesktopNav = () => {
             )}
           </Popover>
         </Box>
-      ))}
+      ))} */}
+    
     </Stack>
   )
 }
@@ -182,9 +186,9 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
 const MobileNav = () => {
   return (
     <Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ md: 'none' }}>
-      {NAV_ITEMS.map((navItem) => (
+      {/* {NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
-      ))}
+      ))} */}
     </Stack>
   )
 }
@@ -239,21 +243,21 @@ const MobileNavItem = ({ label, children, href }) => {
 
 
 
-const NAV_ITEMS = [
-  {
-    label: 'Inspiration', 
-    href: '#', 
-  },
-  {
-    label: 'Find Work', 
-    href: '#',
-  },
-  {
-    label: 'Learn Design',
-    href: '#',
-  },
-  {
-    label: 'Hire Designers',
-    href: '#',
-  },
-]
+// const NAV_ITEMS = [
+//   {
+//     label: 'Inspiration', 
+//     href: '#', 
+//   },
+//   {
+//     label: 'Find Work', 
+//     href: '#',
+//   },
+//   {
+//     label: 'Learn Design',
+//     href: '#',
+//   },
+//   {
+//     label: 'Hire Designers',
+//     href: '#',
+//   },
+// ]
