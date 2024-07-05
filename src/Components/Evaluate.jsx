@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Button, Input, Text, Heading } from "@chakra-ui/react";
-
+import download from "../images/background.jpg"
 const Evaluate = () => {
   return (
     <>
       <Box
-        bgImage={"https://img.freepik.com/free-vector/gradient-liquid-abstract-background_23-2148916930.jpg?w=996&t=st=1720158849~exp=1720159449~hmac=16d675ce8e2ee9845d7a937e1bee2ad4704e1f34ca38e906183df3e214d64826"}
+      bgImage={download}
+        // bgImage={"https://img.freepik.com/free-vector/gradient-liquid-abstract-background_23-2148916930.jpg?w=996&t=st=1720158849~exp=1720159449~hmac=16d675ce8e2ee9845d7a937e1bee2ad4704e1f34ca38e906183df3e214d64826"}
         // opacity={"0.8"}
         bgRepeat={"no-repeat"}
         bgSize={"cover"}
