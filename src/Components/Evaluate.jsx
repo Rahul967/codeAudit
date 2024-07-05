@@ -96,6 +96,7 @@ const Evaluate = () => {
                 defaultLanguage={language}
                 defaultValue="// Enter your code here"
                 onChange={(value) => setUserCode(value)}
+                 theme="vs-dark"
                 options={{ resize: true }}
               />
             </Box>
