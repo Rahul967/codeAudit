@@ -1,77 +1,133 @@
-import React from "react";
-import { Box, Button, Input, Text, Heading } from "@chakra-ui/react";
-import download from "../images/background.jpg"
+import React, { useState } from "react";
+import { Box, Button, Input, Text, Heading, Select } from "@chakra-ui/react";
+import axios from "axios";
+import MonacoEditor from "@monaco-editor/react";
+import download from "../images/background.jpg";
+
 const Evaluate = () => {
+  const [question, setQuestion] = useState("");
+  const [userCode, setUserCode] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  const [language, setLanguage] = useState("javascript"); // State to manage the selected language
+
+  async function generateAnswer(e) {
+    setGeneratingAnswer(true);
+    e.preventDefault();
+    setAnswer("Loading your answer... \n It might take a few seconds");
+
+    const modifiedQuestion = `I have written the following code in ${language}, please suggest ways to improve the code and give suggestions to optimize the code and suggest improvements in naming standards, code quality, etc. Also paste the whole code and add comments in between the code on how we can improve the code. Don't write the solution of the code.\n\n${userCode}`;
+
+    try {
+      const response = await axios({
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCdxILuLbVq4Z8Ila7yfWYQ2PnN6zP2ekU`,
+        method: "post",
+        data: {
+          contents: [{ parts: [{ text: modifiedQuestion }] }],
+        },
+      });
+
+      setAnswer(response.data.candidates[0].content.parts[0].text);
+    } catch (error) {
+      console.log(error);
+      setAnswer("Sorry - Something went wrong. Please try again!");
+    }
+
+    setGeneratingAnswer(false);
+  }
+
   return (
     <>
       <Box
-      bgImage={download}
-        // bgImage={"https://img.freepik.com/free-vector/gradient-liquid-abstract-background_23-2148916930.jpg?w=996&t=st=1720158849~exp=1720159449~hmac=16d675ce8e2ee9845d7a937e1bee2ad4704e1f34ca38e906183df3e214d64826"}
-        // opacity={"0.8"}
+        bgImage={download}
         bgRepeat={"no-repeat"}
         bgSize={"cover"}
         border={"1px solid red"}
-        // bg={"black"}
         height={"89vh"}
         display={"flex"}
         gap={"25px"}
       >
-        <Box border={"0px solid white"} width={"30%"} ml={"20px"}>
-          <Input
-            border={"1px solid white"}
-            height={"30%"}
-            width={"91%"}
-            margin={"20px"}
-            borderRadius={"10px"}
-            textAlign={"left"}
-            placeholder={"enter your question"}
-            color={"white"}
-          />
+        <form onSubmit={generateAnswer}>
+          <Box border={"0px solid white"} width={"30%"} ml={"20px"}>
+            <Input
+              border={"1px solid white"}
+              height={"50px"}
+              width={"250px"}
+              margin={"20px"}
+              borderRadius={"10px"}
+              textAlign={"left"}
+              placeholder={"Enter your question"}
+              color={"white"}
+              required
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
 
-          <Input
-            placeholder={"enter your solution"}
-            border={"1px solid white"}
-            height={"45%"}
-            width={"91%"}
-            margin={"20px"}
-            borderRadius={"10px"}
-          />
+            <Select
+              placeholder="Select language"
+              margin={"20px"}
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              color={"black"}
+              bg={"white"}
+              border={"1px solid white"}
+            >
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              <option value="csharp">C#</option>
+              <option value="cpp">C++</option>
+              <option value="go">Go</option>
+              <option value="ruby">Ruby</option>
+              <option value="typescript">TypeScript</option>
+            </Select>
 
-          <Button width={"50%"} marginLeft={"23%"} bg={"white"} color={"white"}>
-            {" "}
-            Submit
-          </Button>
-        </Box>
+            <Box
+              height={"300px"}
+              width={"250px"}
+              margin={"20px"}
+              borderRadius={"10px"}
+              border={"1px solid white"}
+              color={"white"}
+            >
+              <MonacoEditor
+                height="100%"
+                width="100%"
+                defaultLanguage={language}
+                defaultValue="// Enter your code here"
+                onChange={(value) => setUserCode(value)}
+                options={{ resize: true }}
+              />
+            </Box>
 
+            <Button
+              width={"100px"}
+              marginLeft={"100px"}
+              bg={"white"}
+              color={""}
+              type="submit"
+              disabled={generatingAnswer}
+            >
+              Submit
+            </Button>
+          </Box>
+        </form>
         <Box border={"0px solid white"} width={"37%"}>
           <Box
-          className="card"
+            className="card"
             border={"1px solid white"}
             height={"90%"}
             margin={"20px"}
             borderRadius={"10px"}
             padding={"5px"}
-            // bg={"whitesmoke"}
             opacity={0.8}
-            
           >
             <Heading as="h3" size="lg" color={"white"}>
               Inline Comments for Improvement
             </Heading>
 
             <Text m={"20px"} color={"white"} fontWeight={"bold"}>
-              # Set the next pointer of the current node to point to the
-              previous node curr.next = prev # Update the previous pointer to
-              point to the current node prev = curr # Update the current pointer
-              to point to the next node curr = next # Return the new head of the
-              reversed linked list return prev # Function to print a linked list
-              def print_list(head): # Traverse the linked list and print each
-              node's data curr = head while curr is not None: print(curr.data)
-              curr = curr.next # Function to create a linked list from an array
-              def create_linked_list(arr): # Create the head of the linked list
-              head = Node(arr[0]) # Create the current pointer to traverse the
-              linked list curr = head # Iterate over the array and create nodes
-             
+              {answer}
             </Text>
           </Box>
         </Box>
@@ -84,31 +140,33 @@ const Evaluate = () => {
             borderRadius={"10px"}
             padding={"20px"}
           >
-
-            <Heading  color={"white"} as='h3' size='lg' mt={"10px"}>
-            Naming standards:
+            <Heading color={"white"} as="h3" size="lg" mt={"10px"}>
+              Naming Standards
             </Heading>
-            <Box className="card" borderRadius={"10px"} padding={"5px"}  border={"1px solid white"} color={"white"} mt={"20px"}>
-              Follow a consistent naming convention for
-              variables and functions. For example, use camelCase for variable
-              names and PascalCase for function names. Code readability: Use
-              The current
-              implementation of the reverse_linked_list() function has a time
-              complexity of O(n), where n is the number of nodes in the linked
-            </Box >
+            <Box
+              className="card"
+              borderRadius={"10px"}
+              padding={"5px"}
+              border={"1px solid white"}
+              color={"white"}
+              mt={"20px"}
+            >
+              {answer}
+            </Box>
 
-            <Heading  color={"white"} as='h3' size='lg' mt={"20px"}>
-            Time complexity  
-
+            <Heading color={"white"} as="h3" size="lg" mt={"20px"}>
+              Time Complexity
             </Heading>
-            <Box className="card"  border={"1px solid white"} borderRadius={"10px"} padding={"5px"} color={"white"} mt={"20px"}>
-              The current
-              implementation of the reverse_linked_list() function has a time
-              complexity of O(n), where n is the number of nodes in the linked
-              list. This can be improved to O(1) by using a stack or a queue.
-              Space complexity: The current implementation of the
-              
-            </Box >
+            <Box
+              className="card"
+              border={"1px solid white"}
+              borderRadius={"10px"}
+              padding={"5px"}
+              color={"white"}
+              mt={"20px"}
+            >
+              {answer}
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -117,4 +175,3 @@ const Evaluate = () => {
 };
 
 export default Evaluate;
-
