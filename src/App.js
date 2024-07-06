@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Evaluate from './Components/Evaluate';
-import Dashboard from "./Components/Dashboard"
+import Dashboard from "./Components/DashBoard.jsx"
 
 
 function App() {

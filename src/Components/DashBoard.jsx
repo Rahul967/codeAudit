@@ -15,7 +15,7 @@ const Dashboard = () => {
       
          <Box className="section1">
           <Heading as="h3" size="md" color="white" mb={4}>
-          Inline Comments for Improvement
+          Inline Comments 
           </Heading>
           <Box padding={6} color="white"  height="80%" overflowY="auto"  backgroundColor={"black"}>
             {answer}
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
         <Box className="section2">
           <Heading as="h3" size="md" color="white" mb={4}>
-            Naming Standards
+            Suggestions
           </Heading>
           <Box padding={6} color="white"  height="80%" overflowY="auto"  backgroundColor={"black"}>
             {answer}
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
         <Box  className="section3">
           <Heading as="h3" size="md" color="white" mb={4}>
-            Time Complexity
+            Summary
           </Heading>
           <Box  backgroundColor={"black"} padding={6} color="white" mb={4} height="80%" overflowY="auto">
             {answer}
