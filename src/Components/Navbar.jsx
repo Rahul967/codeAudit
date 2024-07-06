@@ -1,13 +1,14 @@
+
 import React, { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import SignInWithGoogle from "./SignInWithGoogle";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
-import Logo from "../images/codeaudit.png"
-
+import Logo from "../images/codeaudit.png";
+import "./Navbar.css"
 
 const Navbar = () => {
-const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -31,14 +32,13 @@ const [user, setUser] = useState(null);
   };
 
   return (
-    <nav style={{border:"0px solid black",display:"flex",justifyContent:"space-between",backgroundColor:"#1d0b59"}}>
-     
-      <img src={Logo} alt="logo" style={{"width":"120px",marginLeft:"20px"}}/>
-       {user ? (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={user.photoURL} alt="Avatar" style={{ width: "40px", height: "45px", borderRadius: "50%" }} />
-          <span style={{color:"white",margin: "0 10px"}} >{user.displayName}</span>
-          <button style={{color:"white"}} onClick={handleLogout}>Logout</button>
+    <nav className="navbar">
+      <img src={Logo} alt="logo" className="logo" />
+      {user ? (
+        <div className="user-info">
+          <img src={user.photoURL} alt="Avatar" className="avatar" />
+          <span className="username">{user.displayName}</span>
+          <button style={{backgroundColor:"white", color:"black",width:"100px", height:"40px", borderRadius:"5px"}} className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       ) : (
         <SignInWithGoogle />
@@ -48,5 +48,3 @@ const [user, setUser] = useState(null);
 };
 
 export default Navbar;
-
-
