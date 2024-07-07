@@ -12,6 +12,7 @@ import { getFirestore } from "firebase/firestore";
 //   appId: "1:435691555503:web:dd739172aa0bcdc07d225a",
 //   measurementId: "G-2XC6K9QXHE"
 // };
+//
 
 const firebaseConfig = {
   apiKey: "AIzaSyAT8nUrcjCnUqIcJEIAOt2a7UIDd-bkMKY",
