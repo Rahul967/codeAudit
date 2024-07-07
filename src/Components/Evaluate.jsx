@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
-import { Box, Button, Input, Select, Heading } from '@chakra-ui/react';
+
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Input, Select, Heading, useToast } from '@chakra-ui/react';
 import MonacoEditor from '@monaco-editor/react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { auth } from './firebase'; // Ensure you import your Firebase auth configuration
 
+// In-memory cache object
+const cache = {};
+
 const New = () => {
-  const [question, setQuestion] = useState('');
-  const [userCode, setUserCode] = useState('');
-  const [language, setLanguage] = useState('javascript');
-  const [generatingAnswer, setGeneratingAnswer] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
+
+  // Initialize state with cache values or defaults
+  const [question, setQuestion] = useState(() => cache.question || '');
+  const [userCode, setUserCode] = useState(() => cache.userCode || '');
+  const [language, setLanguage] = useState(() => cache.language || 'javascript');
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+
+  useEffect(() => {
+    // Save state to cache on change
+    cache.question = question;
+    cache.userCode = userCode;
+    cache.language = language;
+  }, [question, userCode, language]);
 
   // Function to handle submission
   const generateAnswer = async (e) => {
     e.preventDefault();
-    
+
     // Check if user is logged in
     const user = auth.currentUser;
     if (!user) {
@@ -24,13 +38,12 @@ const New = () => {
     }
 
     setGeneratingAnswer(true);
-    // const modifiedQuestion = `I have written the following code in ${language}, please suggest ways to improve the code and give suggestions to optimize the code and suggest improvements in naming standards, code quality, etc. Also paste the whole code and add comments in between the code on how we can improve the code. Don't write the solution of the code.\n\n${userCode}`;
 
-    const modifiedQuestion = `${question} ,${userCode}.I have written the  code in ${language}.
+    const modifiedQuestion = `${question} ,${userCode}.I have written the code in ${language}.
 
 Provide a feedback that guide coder towards code optimization and improvement, without providing exact solutions.
 
-Give the feedback in JSON format whose key will be title and value will be the feedaback.
+Give the feedback in JSON format whose key will be title and value will be the feedback.
 
 - Inline comments or annotations highlighting areas for improvement in the code.
  suggestions for better coding practices.
@@ -39,9 +52,7 @@ Give the feedback in JSON format whose key will be title and value will be the f
 follow the below sample and give the feedback for the above code in this format.
 { "title": "Code Review: deftwo_sum_brute_force", "feedback": { "Inline Comments": [ // Loop 1 (i): Iterates through all elements in nums. "for i in range(len(nums)):", " // Consider if there's a way to avoid visiting the same element twice?", // Loop 2 (j): Starts from i+1 to avoid duplicate pairs. " for j in range(i + 1, len(nums)):", " // Could this loop be optimized if we have additional information about nums?" ], "Suggestions": [ "Explore using a hash table for potentially faster lookups (average time complexity of O(n)).", "Consider the problem constraints. Can you leverage any properties of the input data (nums) for optimization?" ] }, "summary": { "Strengths": [ "Clear and concise implementation using nested loops.", "Correctly identifies the pair that adds up to the target." ], "Areas for Improvement": [ "Time complexity could be improved for larger datasets (current complexity is O(n^2)).", "Consider using more descriptive variable names (e.g., instead of i and j, use index1 and index2)." ] } }
 
-the inline comments key should always hold the users code with inline comment for the same regarding chnages/suggestions`;
-
-
+the inline comments key should always hold the users code with inline comment for the same regarding changes/suggestions`;
 
     try {
       const response = await axios({
@@ -53,6 +64,15 @@ the inline comments key should always hold the users code with inline comment fo
       });
 
       const answer = response.data.candidates[0].content.parts[0].text;
+      
+      // Update cache with new inputs
+      cache.question = question;
+      cache.userCode = userCode;
+      cache.language = language;
+      
+      // Clear session storage
+      sessionStorage.clear();
+
       navigate('/dashboard', { state: { answer } });
     } catch (error) {
       console.log(error);
@@ -60,6 +80,27 @@ the inline comments key should always hold the users code with inline comment fo
     }
 
     setGeneratingAnswer(false);
+  };
+
+  // Function to handle new query
+  const handleNewQuery = () => {
+    // Clear cache and sessionStorage
+    for (let key in cache) {
+      delete cache[key];
+    }
+    sessionStorage.clear();
+
+    setQuestion('');
+    setUserCode('');
+    setLanguage('javascript');
+    toast({
+      title: "New query initiated.",
+      description: "All inputs have been cleared.",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+      position: "top",
+    });
   };
 
   return (
@@ -83,6 +124,16 @@ the inline comments key should always hold the users code with inline comment fo
         width="40%"
         mx={4}
       >
+        <Button
+          mt={2}
+          colorScheme="green"
+          onClick={handleNewQuery}
+          mb={4}
+          width="fit-content"
+          alignSelf="flex-end"
+        >
+          New Query
+        </Button>
         <Heading as="h4" size="md" color="white" textAlign="left">
           Enter Your Question
         </Heading>
@@ -129,8 +180,9 @@ the inline comments key should always hold the users code with inline comment fo
           height="100%"
           width="100%"
           theme="hc-black"
-          defaultLanguage={language}
-          defaultValue="// Enter your code here"
+           defaultValue="// Enter your code here"
+          language={language}
+          value={userCode}
           onChange={(value) => setUserCode(value)}
           options={{ resize: true }}
         />
@@ -148,4 +200,7 @@ the inline comments key should always hold the users code with inline comment fo
 };
 
 export default New;
+
+
+
 
