@@ -7,7 +7,7 @@ function SignInwithGoogle() {
   function googleLogin() {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then(async (result) => {
-      // console.log(result);
+   
       const user = result.user;
       console.log(user.displayName,"name")
       console.log(user.photoURL,"image")
