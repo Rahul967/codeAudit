@@ -9,9 +9,10 @@
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Screenshot](#screenshot)
 
 ## Introduction
-**CodeAudit** is a hackathon project developed by a team of four members. It is a web application designed to help developers improve their code by providing suggestions on optimization, naming standards, and code quality. The tool supports multiple programming languages and uses the latest AI models to generate insightful feedback.
+**CodeAudit** is a hackathon project developed by a team Cipher of four members. It is a web application designed to help developers improve their code by providing suggestions on optimization, naming standards, and code quality. The tool supports multiple programming languages and uses the latest AI models to generate insightful feedback.
 
 ## Features
 - **Multi-language Support:** Works with JavaScript, Python, Java, C#, C++, Go, Ruby, and TypeScript.
@@ -24,10 +25,8 @@
   - React
   - Chakra UI
   - Monaco Editor
-- **Backend:**
-  - Node.js
-  - Express
-  - Axios
+- **Authentication:**
+  - Firebase
 - **AI:**
   - Google Gemini API
 
@@ -36,7 +35,7 @@ Follow these steps to set up the project locally:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/codeaudit.git
+    git clone https://github.com/Janani1727/codeaudit.git
     cd codeaudit
     ```
 
@@ -56,3 +55,10 @@ Follow these steps to set up the project locally:
 1. Enter your code in the integrated editor.
 2. Select the programming language from the dropdown.
 3. Type your question or specific aspect of the code you want
+
+
+## Screenshot
+ Home page screenshot
+ ![](./src/images/screenshot1.png)
+ Dashboard screenshot
+ ![](./src/images/screenshot2.png)
